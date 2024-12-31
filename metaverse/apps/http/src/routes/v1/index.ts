@@ -2,10 +2,16 @@ import { Router } from "express";
 import { userRouter } from "./user";
 import { spaceRouter } from "./space";
 import { adminRouter } from "./admin";
+import { SignupSchema } from "../../types";
 
 export const router = Router();
 
 router.post("/signup", (req, res) => {
+    const parsedData = SignupSchema.safeParse(req.body);
+    if (!parsedData.success) {
+        return
+    }
+    //db entery
     res.json({
         msg: "Signup"
     })
