@@ -3,13 +3,27 @@ import { userRouter } from "./user";
 import { spaceRouter } from "./space";
 import { adminRouter } from "./admin";
 import { SignupSchema } from "../../types";
+import client from "@repo/db/client";
 
 export const router = Router();
 
-router.post("/signup", (req, res) => {
+router.post("/signup", async (req, res) => {
     const parsedData = SignupSchema.safeParse(req.body);
     if (!parsedData.success) {
-        return
+        res.status(400).json({ message: "Validation failed" })
+        return;
+    }
+    try {
+        await client.user.create({
+            data: {
+                username: parsedData.data.username,
+                password: parsedData.data.password,
+                role: parsedData.data.type === "admin" ? "Admin" : "User"
+            }
+        })
+
+    } catch (e) {
+
     }
     //db entery
     res.json({
