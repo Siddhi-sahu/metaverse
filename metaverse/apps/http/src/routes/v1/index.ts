@@ -35,10 +35,7 @@ router.post("/signup", async (req, res) => {
         res.status(400).json({ Message: "User already exists" })
 
     }
-    //db entery
-    res.json({
-        msg: "Signup"
-    })
+
 });
 
 router.post("/signin", async (req, res) => {
