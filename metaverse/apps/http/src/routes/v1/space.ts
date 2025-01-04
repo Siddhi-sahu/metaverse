@@ -33,7 +33,9 @@ spaceRouter.post("/", userMiddleware, async (req, res) => {
             id: parsedData.data.mapId
         },
         select: {
-            mapElements: true
+            mapElements: true,
+            width: true,
+            height: true
         }
     });
 
@@ -42,12 +44,12 @@ spaceRouter.post("/", userMiddleware, async (req, res) => {
         return;
     }
 
-    await client.$transaction(async () => {
+    let space = await client.$transaction(async () => {
         const space = await client.space.create({
             data: {
                 name: parsedData.data.name,
-                width: parseInt(parsedData.data.dimensions.split("x")[0]),
-                height: parseInt(parsedData.data.dimensions.split("x")[1]),
+                width: map.width,
+                height: map.height,
                 createrId: req.userId!
             }
         })
@@ -60,15 +62,61 @@ spaceRouter.post("/", userMiddleware, async (req, res) => {
                 y: e.y!
             }))
         })
+
+        return space;
     })
+    res.json({ spaceId: space.id })
 
 
 
 })
-spaceRouter.delete("/:spaceId", (req, res) => {
+spaceRouter.delete("/:spaceId", userMiddleware, async (req, res) => {
+    const space = await client.space.findUnique({
+        where: {
+            id: req.params.spaceId
+        },
+        select: {
+            createrId: true
+        }
+    });
+
+    if (!space) {
+        res.status(400).json({ msg: "Space not found" });
+        return;
+    }
+
+    if (space.createrId != req.userId) {
+        res.status(403).json({
+            msg: "Unauthorized"
+        });
+        return;
+    }
+
+    await client.space.delete({
+        where: {
+            id: req.params.spaceId
+        }
+    });
+
+    res.json({ msg: "Space deleted" })
 
 })
-spaceRouter.get("/all", (req, res) => {
+spaceRouter.get("/all", userMiddleware, async (req, res) => {
+    const spaces = await client.space.findMany({
+        where: {
+            createrId: req.userId
+        }
+    });
+
+    res.json({
+        spaces: spaces.map(s => ({
+            id: s.id,
+            name: s.name,
+            thumbnail: s.thumbnail,
+            dimensions: `${s.width}x${s.height}`
+
+        }))
+    })
 
 })
 
