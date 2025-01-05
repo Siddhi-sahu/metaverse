@@ -30,6 +30,9 @@ export const AddElementSchema = z.object({
     x: z.number(),
     y: z.number()
 
+});
+export const DeleteElementSchema = z.object({
+    id: z.string()
 })
 
 export const CreateElementSchema = z.object({
