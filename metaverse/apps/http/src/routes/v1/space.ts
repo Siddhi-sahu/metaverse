@@ -26,9 +26,10 @@ spaceRouter.post("/", userMiddleware, async (req, res) => {
 
         });
         res.json({ spaceId: space.id });
+        return
     }
 
-    const map = await client.map.findUnique({
+    const map = await client.map.findFirst({
         where: {
             id: parsedData.data.mapId
         },
