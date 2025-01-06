@@ -191,7 +191,11 @@ spaceRouter.get("/:spaceId", async (req, res) => {
             id: req.params.spaceId
         },
         include: {
-            elements: true
+            elements: {
+                include: {
+                    element: true
+                }
+            }
         }
     });
 
@@ -203,9 +207,20 @@ spaceRouter.get("/:spaceId", async (req, res) => {
     }
 
     res.json({
-        space: {
-            id: space.id
-        }
-    })
+        "dimensions": `${space.width}x${space.height}`,
+        elements: space.elements.map(e => ({
+            id: e.id,
+            element: {
+                id: e.element.id,
+                imageUrl: e.element.imageUrl,
+                width: e.element.width,
+                height: e.element.height,
+                static: e.element.static
+            },
+            x: e.x,
+            y: e.y
+        }))
+
+    });
 
 })
