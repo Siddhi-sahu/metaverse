@@ -6,8 +6,10 @@ import { userMiddleware } from "../../middleware/user";
 export const userRouter = Router();
 
 userRouter.post("/metadata", userMiddleware, async (req, res) => {
+    console.log("req.userId:", req.userId);
     const parsedData = UpdateMetadataSchema.safeParse(req.body);
     if (!parsedData.success) {
+        console.log("parsed data incorrect")
         res.status(400).json({
             message: "Validation error"
         });
@@ -30,7 +32,7 @@ userRouter.post("/metadata", userMiddleware, async (req, res) => {
         })
 
     } catch (e) {
-        res.status(403).json({ msg: "errir in /metadata" })
+        res.status(400).json({ msg: "errir in /metadata" })
 
     }
 
