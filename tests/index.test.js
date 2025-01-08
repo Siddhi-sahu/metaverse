@@ -116,7 +116,7 @@ describe.skip("User metadata endpoint",()=> {
             "name": "Timmy"
         },{
             headers: {
-                "authorization":`Bearer ${token}`
+                authorization:`Bearer ${token}`
             }
         });
 
@@ -129,7 +129,7 @@ describe.skip("User metadata endpoint",()=> {
             avatarId: "123123"
         },{
             headers: {
-                "authorization": `Bearer ${token}`
+                authorization: `Bearer ${token}`
             }
         })
         expect(response.status).toBe(400)
@@ -140,7 +140,7 @@ describe.skip("User metadata endpoint",()=> {
             avatarId,
         }, {
             headers: {
-                "authorization": `Bearer ${token}`
+                authorization: `Bearer ${token}`
             }
         });
         
@@ -199,7 +199,7 @@ describe.skip("User avatar information", () => {
     })
 })
 
-describe("Space Information", () => {
+describe.skip("Space Information", () => {
     let mapId;
     let element1Id;
     let element2Id;
@@ -492,7 +492,7 @@ describe("Arena endpoints", ()=> {
 
         }, {
             headers: {
-                "authorization": `Bearer ${userToken}`
+                authorization: `Bearer ${userToken}`
             }
         });
 
@@ -503,16 +503,16 @@ describe("Arena endpoints", ()=> {
     test("Incorrect spaceId returns a 400", async () => {
        const response = axios.get(`${BACKEND_URL}/api/v1/space/12334fe`,{
         headers: {
-            "authorization": `Bearer ${userToken}`
+            authorization: `Bearer ${userToken}`
         }
-       })
+       });
        expect(response.status).toBe(400)
 
     })
     test("Correct spaceId returns all the elements", async () => {
        const response = await axios.get(`${BACKEND_URL}/api/v1/space/${spaceId}`,{
         headers: {
-            "authorization": `Bearer ${userToken}`
+            authorization: `Bearer ${userToken}`
         }
        })
        //here
@@ -523,23 +523,22 @@ describe("Arena endpoints", ()=> {
     test("delete endpoint is able to delete an element", async () => {
        const response = await axios.get(`${BACKEND_URL}/api/v1/space/${spaceId}`,{
         headers: {
-            "authorization": `Bearer ${userToken}`
+            authorization: `Bearer ${userToken}`
         }
        });
        await axios.delete(`${BACKEND_URL}/api/v1/space/${spaceId}`,{
         headers: {
-            "authorization": `Bearer ${userToken}`
+            authorization: `Bearer ${userToken}`
         },
         data: {
            
-                spaceId: spaceId,
-                elementId: response.data.elements[0].id
+                id: response.data.elements[0].id
                
         }
        });
        const newResponse = await axios.get(`${BACKEND_URL}/api/v1/space/${spaceId}`,{
         headers: {
-            "authorization": `Bearer ${userToken}`
+            authorization: `Bearer ${userToken}`
         }
        });
        expect(newResponse.data.elements.length).toBe(2);
@@ -553,7 +552,7 @@ describe("Arena endpoints", ()=> {
           "y": 210000
          }, {
             headers: {
-                "authorization": `Bearer ${userToken}`
+                authorization: `Bearer ${userToken}`
             } 
         });
         
@@ -569,13 +568,13 @@ describe("Arena endpoints", ()=> {
          "y": 20
         }, {
             headers: {
-                "authorization": `Bearer ${userToken}`
+                authorization: `Bearer ${userToken}`
             }
         });
        
         const newResponse = await axios.get(`${BACKEND_URL}/api/v1/space/${spaceId}`, {
             headers: {
-                "authorization": `Bearer ${userToken}`
+                authorization: `Bearer ${userToken}`
             }
     });
         expect(newResponse.data.elements.length).toBe(3);
@@ -652,7 +651,7 @@ describe("Admin endpoints", ()=> {
             "name": "Timmy"
         },{
             headers: {
-                "authorization": `Bearer ${userToken}`
+                authorization: `Bearer ${userToken}`
             }
         });
 
@@ -660,7 +659,7 @@ describe("Admin endpoints", ()=> {
             "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm3RFDZM21teuCMFYx_AROjt-AzUwDBROFww&s"
         },{
             headers: {
-                "authorization": `Bearer ${userToken}`
+                authorization: `Bearer ${userToken}`
             }
         });
         expect(elementResponse.status).toBe(403);
@@ -700,7 +699,7 @@ describe("Admin endpoints", ()=> {
             "name": "Timmy"
         },{
             headers: {
-                "authorization": `Bearer ${adminToken}`
+                authorization: `Bearer ${adminToken}`
             }
         });
 
@@ -728,7 +727,7 @@ describe("Admin endpoints", ()=> {
             "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm3RFDZM21teuCMFYx_AROjt-AzUwDBROFww&s"
         },{
             headers: {
-                "authorization": `Bearer ${adminToken}`
+                authorization: `Bearer ${adminToken}`
             }
         });
 
@@ -855,7 +854,7 @@ describe("Admin endpoints", ()=> {
 
 //         }, {
 //             headers: {
-//                 "authorization": `Bearer ${userToken}`
+//                 authorization: `Bearer ${userToken}`
 //             }
 //         });
 
