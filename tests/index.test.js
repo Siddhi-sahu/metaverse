@@ -39,7 +39,7 @@ const axios = {
     },
 }
 
-describe.skip("Authentication", () => {
+describe("Authentication", () => {
     test("user is able to signup only once", async () => {
         const username = "himani" + Math.random();
         const password = "123456";
@@ -99,7 +99,7 @@ describe.skip("Authentication", () => {
 
 
 //update meta data endpoint
-describe.skip("User metadata endpoint",()=> {
+describe("User metadata endpoint",()=> {
     let token = "";
     let avatarId = "";
     beforeAll(async ()=>{
@@ -157,7 +157,7 @@ describe.skip("User metadata endpoint",()=> {
     })
 })
 
-describe.skip("User avatar information", () => {
+describe("User avatar information", () => {
     let avatarId;
     let token;
     let userId;
@@ -199,7 +199,7 @@ describe.skip("User avatar information", () => {
     })
 })
 
-describe.skip("Space Information", () => {
+describe("Space Information", () => {
     let mapId;
     let element1Id;
     let element2Id;
@@ -526,14 +526,14 @@ describe("Arena endpoints", ()=> {
             authorization: `Bearer ${userToken}`
         }
        });
-       await axios.delete(`${BACKEND_URL}/api/v1/space/${spaceId}`,{
-        headers: {
-            authorization: `Bearer ${userToken}`
-        },
+       await axios.delete(`${BACKEND_URL}/api/v1/space/element`,{
         data: {
            
                 id: response.data.elements[0].id
                
+        },
+        headers: {
+            authorization: `Bearer ${userToken}`
         }
        });
        const newResponse = await axios.get(`${BACKEND_URL}/api/v1/space/${spaceId}`,{
