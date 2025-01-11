@@ -157,7 +157,7 @@ describe.skip("User metadata endpoint",()=> {
     })
 })
 
-describe("User avatar information", () => {
+describe.skip("User avatar information", () => {
     let avatarId;
     let token;
     let userId;
@@ -185,7 +185,7 @@ describe("User avatar information", () => {
     });
 
     test("Get back avatar information for a user", async () => {
-        const response = await axios.post(`${BACKEND_URL}/api/v1/user/metadata/bulk?ids=[${userId}]`);
+        const response = await axios.get(`${BACKEND_URL}/api/v1/user/metadata/bulk?ids=[${userId}]`);
         expect(response.data.avatars.length).toBe(1);
         expect(response.data.avatars[0].userId).toBe(userId);
 

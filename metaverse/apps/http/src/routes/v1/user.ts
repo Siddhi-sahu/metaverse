@@ -40,7 +40,7 @@ userRouter.post("/metadata", userMiddleware, async (req, res) => {
 
 userRouter.get("/metadata/bulk", async (req, res) => {
     const userIdsString = (req.query.ids ?? "[]") as string;
-    const userIds = (userIdsString).slice(1, userIdsString?.length - 2).split(",");
+    const userIds = (userIdsString).slice(1, userIdsString?.length - 1).split(",");
 
     const metadata = await client.user.findMany({
         where: {
