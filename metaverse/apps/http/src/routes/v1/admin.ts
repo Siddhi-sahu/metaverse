@@ -5,7 +5,9 @@ import client from "@repo/db/client";
 
 export const adminRouter = Router();
 
-adminRouter.post("/element", adminMiddleware, async (req, res) => {
+adminRouter.use(adminMiddleware);
+
+adminRouter.post("/element", async (req, res) => {
     const parsedData = CreateElementSchema.safeParse(req.body);
     if (!parsedData.success) {
         res.status(400).json({
@@ -30,7 +32,7 @@ adminRouter.post("/element", adminMiddleware, async (req, res) => {
 
 
 })
-adminRouter.put("/element/:elementId", adminMiddleware, async (req, res) => {
+adminRouter.put("/element/:elementId", async (req, res) => {
     const parsedData = UpdateElementSchema.safeParse(req.body);
 
     if (!parsedData.success) {

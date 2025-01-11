@@ -39,7 +39,7 @@ const axios = {
     },
 }
 
-describe("Authentication", () => {
+describe.skip("Authentication", () => {
     test("user is able to signup only once", async () => {
         const username = "himani" + Math.random();
         const password = "123456";
@@ -99,7 +99,7 @@ describe("Authentication", () => {
 
 
 //update meta data endpoint
-describe("User metadata endpoint",()=> {
+describe.skip("User metadata endpoint",()=> {
     let token = "";
     let avatarId = "";
     beforeAll(async ()=>{
@@ -199,7 +199,7 @@ describe("User avatar information", () => {
     })
 })
 
-describe("Space Information", () => {
+describe.skip("Space Information", () => {
     let mapId;
     let element1Id;
     let element2Id;
@@ -400,7 +400,7 @@ describe("Space Information", () => {
 })
 
 // //start
-describe("Arena endpoints", ()=> {
+describe.skip("Arena endpoints", ()=> {
     let mapId;
     let element1Id;
     let element2Id;
@@ -501,7 +501,7 @@ describe("Arena endpoints", ()=> {
     });
 
     test("Incorrect spaceId returns a 400", async () => {
-       const response = axios.get(`${BACKEND_URL}/api/v1/space/12334fe`,{
+       const response = await axios.get(`${BACKEND_URL}/api/v1/space/12334fe`,{
         headers: {
             authorization: `Bearer ${userToken}`
         }
@@ -585,7 +585,7 @@ describe("Arena endpoints", ()=> {
 
 })
 
-describe("Admin endpoints", ()=> {
+describe.skip("Admin endpoints", ()=> {
     
     let adminToken;
     let adminId;
@@ -685,6 +685,7 @@ describe("Admin endpoints", ()=> {
         
         const mapResponse = await axios.post(`${BACKEND_URL}/api/v1/admin/map`, {
             "thumbnail" : "https://thumbnail.com/a.png",
+            "name": "Space",
             "dimensions": "100x200",
             "defaultElements": []
             

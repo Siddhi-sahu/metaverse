@@ -79,7 +79,7 @@ spaceRouter.delete("/element", userMiddleware, async (req, res) => {
         return;
     }
 
-    const spaceElement = await client.spaceElements.findUnique({
+    const spaceElement = await client.spaceElements.findFirst({
         where: {
             id: parsedData.data.id
         },
