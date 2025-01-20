@@ -777,7 +777,7 @@ describe("Websocket tests", () => {
         const adminSignupResponse = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
             username,
             password,
-            role: "admin"
+            type: "admin"
         });
         const adminSigninResponse = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
             username,
@@ -791,7 +791,7 @@ describe("Websocket tests", () => {
         const userSignupResponse = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
             username: username + "-user",
             password,
-            role: "user"
+            type: "user"
         });
         const userSigninResponse = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
             username: username + "-user",
@@ -865,33 +865,32 @@ describe("Websocket tests", () => {
 
     async function setupWs(){
      ws1 = new WebSocket(WS_URL);
-    
-
-     await new Promise(r =>{
-        ws1.onopen = r
-     });
      ws1.onmessage = (event) => {
         ws1Messages.push(JSON.parse(event.data))
      }
 
+
+     await new Promise(r =>{
+        ws1.onopen = r
+     });
+    
      ws2 = new WebSocket(WS_URL);
 
+     ws2.onmessage = (event) => {
+        ws2Messages.push(JSON.parse(event.data))
+     }
      await new Promise(r => {
         ws2.onopen = r
      });
 
-     
-     ws2.onmessage = (event) => {
-        ws2Messages.push(JSON.parse(event.data))
-     }
 
     
     }
     
 
     beforeAll(async()=> {
-        setupHTTP()
-        setupWs()
+        await setupHTTP()
+        await setupWs()
         
     });
 
@@ -935,7 +934,7 @@ describe("Websocket tests", () => {
 
     test("User should not be able to move across the boundary of the wall", async ()=> {
         ws1.send(JSON.stringify({
-            type: "movement",
+            type: "move",
             payload: {
                 x: 100000,
                 y: 10000
@@ -943,14 +942,14 @@ describe("Websocket tests", () => {
         }));
 
         const message = await waitForAndPopLatestMessage(ws1Messages);
-        expect(message.type).toBe("movement-rejected");
+        expect(message.type).toBe("move-rejected");
         expect(message.payload.x).toBe(adminX);
         expect(message.payload.y).toBe(adminY);
     })
 
     test("User should not be able to move two blocks at the same time", async ()=> {
         ws1.send(JSON.stringify({
-            type: "movement",
+            type: "move",
             payload: {
                 x: adminX + 2,
                 y: adminY
@@ -958,14 +957,14 @@ describe("Websocket tests", () => {
         }));
 
         const message = await waitForAndPopLatestMessage(ws1Messages);
-        expect(message.type).toBe("movement-rejected");
+        expect(message.type).toBe("move-rejected");
         expect(message.payload.x).toBe(adminX);
         expect(message.payload.y).toBe(adminY);
     });
 
-    test("Correct movement should be broadcasted to the other sockets in the room", async ()=> {
+    test("Correct move should be broadcasted to the other sockets in the room", async ()=> {
         ws1.send(JSON.stringify({
-            type: "movement",
+            type: "move",
             payload: {
                 x: adminX + 1,
                 y: adminY,
@@ -974,7 +973,7 @@ describe("Websocket tests", () => {
         }));
 
         const message = await waitForAndPopLatestMessage(ws2Messages);
-        expect(message.type).toBe("movement");
+        expect(message.type).toBe("move");
         expect(message.payload.x).toBe(adminX + 1);
         expect(message.payload.y).toBe(adminY);
     });

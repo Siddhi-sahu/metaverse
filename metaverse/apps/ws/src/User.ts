@@ -21,20 +21,27 @@ export class User {
     private spaceId?: string;
     private x: number;
     private y: number;
+    private ws: WebSocket;
 
-    constructor(private ws: WebSocket) {
+    constructor(ws: WebSocket) {
         this.id = getRandomString(10);
         this.x = 0;
         this.y = 0;
+        this.ws = ws;
+        this.initHandlers()
 
     }
 
     initHandlers() {
         this.ws.on("message", async (data) => {
+            console.log(data);
             const parsedData = JSON.parse(data.toString());
+            console.log(parsedData);
+
 
             switch (parsedData.type) {
                 case "join":
+                    console.log("jpin recieved")
                     const spaceId = parsedData.payload.spaceId;
                     const token = parsedData.payload.token;
                     const userId = (jwt.verify(token, JWT_SECRET) as JwtPayload).userId;
