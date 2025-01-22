@@ -5,19 +5,14 @@ import { userMiddleware } from "../../middleware/user";
 
 export const userRouter = Router();
 
+
 userRouter.post("/metadata", userMiddleware, async (req, res) => {
-    console.log("req.userId:", req.userId);
-    const parsedData = UpdateMetadataSchema.safeParse(req.body);
+    const parsedData = UpdateMetadataSchema.safeParse(req.body)
     if (!parsedData.success) {
         console.log("parsed data incorrect")
-        res.status(400).json({
-            message: "Validation error"
-        });
-
-        return;
-
+        res.status(400).json({ message: "Validation failed" })
+        return
     }
-
     try {
         await client.user.update({
             where: {
@@ -26,17 +21,14 @@ userRouter.post("/metadata", userMiddleware, async (req, res) => {
             data: {
                 avatarId: parsedData.data.avatarId
             }
-        });
-        res.json({
-            msg: "Metadata Updated"
         })
-
+        res.json({ message: "Metadata updated" })
     } catch (e) {
-        res.status(400).json({ msg: "errir in /metadata" })
-
+        console.log("error")
+        res.status(400).json({ message: "Internal server error" })
     }
+})
 
-});
 
 userRouter.get("/metadata/bulk", async (req, res) => {
     const userIdsString = (req.query.ids ?? "[]") as string;
